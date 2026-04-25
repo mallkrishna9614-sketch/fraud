@@ -2,8 +2,8 @@
 
 import { OrbitControls, Stars } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef, useState } from "react";
-import { Group } from "three";
+import { useMemo, useRef, useState, type ReactNode } from "react";
+import type { Group } from "three";
 import { GraphResponse } from "@/lib/types";
 import { Graph3DEdge } from "./Graph3DEdge";
 import { Graph3DNode } from "./Graph3DNode";
@@ -21,8 +21,8 @@ type TooltipState = {
   y: number;
 };
 
-function RotatingGroup({ children }: { children: React.ReactNode }) {
-  const groupRef = useRef<Group>(null);
+function RotatingGroup({ children }: { children: ReactNode }) {
+  const groupRef = useRef<Group | null>(null);
 
   useFrame((_, delta) => {
     if (groupRef.current) {
@@ -69,7 +69,7 @@ export function Graph3D({ graphData, selectedUserId, onSelectUser }: Graph3DProp
     <div className="relative h-[540px] w-full overflow-hidden rounded-2xl border border-neonBlue/30 bg-gradient-to-br from-[#02040c] via-[#030b1c] to-[#060917] shadow-glowBlue">
       {tooltip ? (
         <div
-          className="pointer-events-none absolute z-20 rounded-lg border border-neonBlue/50 bg-slate-950/90 px-3 py-2 text-xs text-slate-100 shadow-glowBlue"
+          className="pointer-events-none fixed z-50 rounded-lg border border-neonBlue/50 bg-slate-950/90 px-3 py-2 text-xs text-slate-100 shadow-glowBlue"
           style={{ left: tooltip.x + 14, top: tooltip.y + 14 }}
         >
           <p className="font-semibold text-neonBlue">{tooltip.id}</p>

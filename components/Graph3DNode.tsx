@@ -1,9 +1,16 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber";
 import { Sphere } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import { Mesh } from "three";
+import type { Mesh } from "three";
+
+type TooltipPayload = {
+  id: string;
+  riskScore: number;
+  x: number;
+  y: number;
+};
 
 type Graph3DNodeProps = {
   id: string;
@@ -11,7 +18,7 @@ type Graph3DNodeProps = {
   riskScore: number;
   selected: boolean;
   connected: boolean;
-  onHover: (payload: { id: string; riskScore: number; x: number; y: number } | null) => void;
+  onHover: (payload: TooltipPayload | null) => void;
   onSelect: (id: string) => void;
 };
 
@@ -24,12 +31,12 @@ export function Graph3DNode({
   onHover,
   onSelect
 }: Graph3DNodeProps) {
-  const meshRef = useRef<Mesh>(null);
+  const meshRef = useRef<Mesh | null>(null);
   const fraud = riskScore >= 65;
   const amplitude = useMemo(() => Math.random() * 0.12 + 0.04, []);
   const offset = useMemo(() => Math.random() * Math.PI * 2, []);
 
-  useFrame(({ clock, pointer, size }) => {
+  useFrame(({ clock }) => {
     if (!meshRef.current) return;
 
     const t = clock.getElapsedTime();
@@ -38,16 +45,6 @@ export function Graph3DNode({
 
     meshRef.current.position.set(position[0], position[1] + floatY, position[2]);
     meshRef.current.scale.setScalar((selected ? 1.45 : connected ? 1.2 : 1) * pulse);
-
-    const distance = Math.hypot(pointer.x - meshRef.current.position.x / 8, pointer.y - meshRef.current.position.y / 8);
-    if (distance < 0.08) {
-      onHover({
-        id,
-        riskScore,
-        x: ((pointer.x + 1) / 2) * size.width,
-        y: ((-pointer.y + 1) / 2) * size.height
-      });
-    }
   });
 
   return (
@@ -55,17 +52,13 @@ export function Graph3DNode({
       ref={meshRef}
       args={[0.14, 24, 24]}
       position={position}
-      onPointerOver={(event) => {
-        event.stopPropagation();
-        onHover({ id, riskScore, x: event.pointer.x, y: event.pointer.y });
-      }}
       onPointerMove={(event) => {
         event.stopPropagation();
         onHover({
           id,
           riskScore,
-          x: event.clientX,
-          y: event.clientY
+          x: event.nativeEvent.clientX,
+          y: event.nativeEvent.clientY
         });
       }}
       onPointerOut={() => onHover(null)}
