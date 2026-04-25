@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-import { FraudGraph } from "@/components/FraudGraph";
+import { Graph3D } from "@/components/Graph3D";
 import { LiveFeed } from "@/components/LiveFeed";
 import { MetricCard } from "@/components/MetricCard";
 import { RiskChart } from "@/components/RiskChart";
@@ -89,7 +89,7 @@ export default function DashboardPage() {
         </section>
 
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-[2fr_1fr]">
-          <FraudGraph graphData={graphData} selectedUserId={selectedUser?.id} onSelectUser={setSelectedUserId} />
+          <Graph3D graphData={graphData} selectedUserId={selectedUser?.id} onSelectUser={setSelectedUserId} />
           <UserDetailPanel user={selectedUser} />
         </section>
 

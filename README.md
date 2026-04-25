@@ -1,12 +1,12 @@
 # AI Fraud Detection System
 
-A modern Next.js dashboard for real-time fraud monitoring with interactive graph exploration, explainable risk context, live transaction activity, and API-ready data loading.
+A modern Next.js dashboard for real-time fraud monitoring with a futuristic 3D spherical network, explainable risk context, live transaction activity, and API-ready data loading.
 
 ## Stack
 - Next.js + React + TypeScript
 - Tailwind CSS
 - Framer Motion
-- React Flow
+- React Three Fiber + Drei + Three.js
 - Recharts
 
 ## API placeholders
